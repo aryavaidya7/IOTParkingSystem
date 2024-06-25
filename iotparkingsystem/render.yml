@@ -1,0 +1,17 @@
+runtime: python-3.12
+
+build:
+  commands:
+    - pip install -r requirements.txt
+  artifacts:
+    paths:
+      - static/
+      - media/
+  env:
+    variables:
+      SECRET_KEY: $SECRET_KEY
+      DATABASE_URL: $DATABASE_URL
+
+build_env:
+  SECRET_KEY: $SECRET_KEY
+  DATABASE_URL: $DATABASE_URL
