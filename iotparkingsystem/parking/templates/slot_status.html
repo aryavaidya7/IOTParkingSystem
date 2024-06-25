@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOT-based Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+<style>
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: rgba(0, 0, 0, 0.860);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        flex-grow: 1;
+        padding-top: 50px;
+      }
+      h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .slot-status {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: black;
+      }
+
+      .slot-status.available {
+        background-color: #4CAF50;
+      }
+      .slot-status.occupied {
+        background-color: #e74c3c;
+      }
+      .slot-status h3 {
+        margin: 0;
+        padding: 0;
+        color: #fff;
+       
+      }
+      .btn btn-primary {
+        background-color: #0b5bd4;
+        text-align: center;
+        text-decoration-color: white;
+      }
+      .pk{
+        text-align: center;
+        color: white
+      }
+      .button-container {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .btn-primary {
+    margin: 0 auto;
+    display: block;
+    width: 50%;
+  }
+
+  .extra{
+    height:70vh;
+  }
+
+  @media (max-width: 1200px) {
+    .container {
+      max-width: 800px;
+    }
+    .extra{
+      height:85vh;
+    }
+  }
+  @media (max-width: 1000px) {
+    .container {
+      max-width: 600px;
+    }
+    .extra{
+      height:85vh;
+    }
+  }
+  @media (max-width: 768px) {
+    .container {
+      max-width: 500px;
+    }
+    .hideOnMobile {
+      display: none; /* Hide on smaller screens */
+    }
+    .extra{
+      height:85vh;
+    }
+    
+  }
+  @media (max-width: 480px) {
+    .container {
+      max-width: 400px;
+      padding: 10px;
+    }
+    .extra{
+      height:75vh;
+    }
+  }
+
+</style>
+</head>
+<body>
+  <div>
+    <div class="sidebar">
+     <ul>
+      <li onclick=hideSidebar()><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 96 960 960" width="26"><path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg></a></li>
+      <li><a href="{% url 'index' %}">Home</a></li>
+     {% if user.is_authenticated %}
+          <li><a href="#">Project Description</a></li>
+       <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+          <li><a href="{% url 'signup' %}">Sign up</a></li>
+      {% endif %}
+     </ul>
+    </div>
+  <div>
+    <nav>
+     <ul>
+      <li><img src="{% static 'IOTlogo.jpeg' %}" alt=""><p>IOT-based Parking Management System</p></li>
+      <li class="hideOnMobile"><a href="{% url 'index' %}">Home</a></li>
+      <li class="hideOnMobile"><a href="#">Project Description</a></li>
+      {% if user.is_authenticated %}
+          <li class="hideOnMobile"><a href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+          <li class="hideOnMobile"><a href="{% url 'login' %}">Login</a></li>
+          <li class="hideOnMobile"><a href="{% url 'signup' %}">Sign up</a></li>
+      {% endif %}
+      <li class="menu-button" onclick=showSidebar()><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 96 960 960" width="30"><path d="M120 816v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"/></svg></a></li>
+     </ul>
+    </nav>
+  </div>
+
+<br><br>
+
+<div class="extra">
+  <div class="container">
+    <h2>Slot Status</h2>
+    <div id="slot1" class="slot-status">
+        <h3>Slot 1: <span id="slot1_status">{{ slot1_status }}</span></h3>
+    </div>
+    <div id="slot2" class="slot-status">
+        <h3>Slot 2: <span id="slot2_status">{{ slot2_status }}</span></h3>
+    </div>
+    <div id="slot3" class="slot-status">
+        <h3>Slot 3: <span id="slot3_status">{{ slot3_status }}</span></h3>
+    </div>
+    <div id="slot4" class="slot-status">
+        <h3>Slot 4: <span id="slot4_status">{{ slot4_status }}</span></h3>
+    </div>
+    <p class="pk">Want to park your vehicle? No worries, click the button below to experience our technology!</p>
+    {% if user.is_authenticated %}
+   <a href="{% url 'operate' %}" class="btn btn-primary">Park Your vehicle!</a>
+{% else %}
+   <a href="{% url 'login' %}" class="btn btn-primary">Park Your vehicle!</a>
+{% endif %}   
+</div>
+</div>
+
+<br><br><br>  
+  <footer class="footer">
+  <p>IOT-based Parking Management System &copy; 2024</p>
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+
+
+
+
+        <script>
+            function showSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.style.display = 'flex';
+            }
+            function hideSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.style.display = 'none';
+            }
+        </script>
+        <script>
+          function fetchSlotStatus() {
+              fetch('/get_slot_status/')
+                  .then(response => response.json())
+                  .then(data => {
+                      document.getElementById('slot1_status').textContent = data.slot1_status;
+                      document.getElementById('slot1').className = data.slot1_status == 'available' ? 'slot-status available' : 'slot-status occupied';
+   
+                      document.getElementById('slot2_status').textContent = data.slot2_status;
+                      document.getElementById('slot2').className = data.slot2_status == 'available' ? 'slot-status available' : 'slot-status occupied';
+   
+                      document.getElementById('slot3_status').textContent = data.slot3_status;
+                      document.getElementById('slot3').className = data.slot3_status == 'available' ? 'slot-status available' : 'slot-status occupied';
+   
+                      document.getElementById('slot4_status').textContent = data.slot4_status;
+                      document.getElementById('slot4').className = data.slot4_status == 'available' ? 'slot-status available' : 'slot-status occupied';
+                  });
+          }
+   
+          setInterval(fetchSlotStatus, 500);
+      </script>
+      
+</body>
+</html>
