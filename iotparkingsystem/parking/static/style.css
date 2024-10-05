@@ -1,32 +1,75 @@
+/* ---------------------------------------------------
+   1. Global Styles
+----------------------------------------------------- */
 * {
   margin: 0;
   padding: 0;
-  
+  box-sizing: border-box;
 }
 
+/* Root variables for easy color management */
+:root {
+  --primary-color: #1e3c72; /* Deep Blue */
+  --secondary-color: #2a5298; /* Lighter Blue */
+  --accent-color: #ff7e5f; /* Coral */
+  --background-color: #f5f7fa; /* Light Gray */
+  --text-color: #ffffff; /* White */
+  --card-bg: rgba(30, 60, 114, 0.9); /* Semi-transparent Deep Blue */
+  --nav-bg: rgba(30, 60, 114, 0.85); /* Semi-transparent Deep Blue */
+  --footer-bg: rgba(30, 60, 114, 0.85);
+  --transition-speed: 0.3s;
+}
+
+/* Body Styling */
 body {
   min-height: 100vh;
   background-image: url(Index.jpeg);
   background-attachment: fixed;
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(2px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+  transition: background 0.5s ease-in-out;
 }
 
+/* Smooth fade-in for body */
+body {
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Keyframes for fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------------------------------------------------
+   2. Navigation Styling
+----------------------------------------------------- */
 nav {
-  background-color: rgba(0, 0, 0, 0.689);
+  background-color: var(--nav-bg);
   backdrop-filter: blur(10px);
-  height: 100px;
-  max-height: unset; 
+  height: 80px;
   width: 100%;
-  padding: 0;
-  margin: 0;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 1000;
-  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color var(--transition-speed);
 }
 
+/* Change nav background on scroll */
+nav.scrolled {
+  background-color: rgba(30, 60, 114, 0.95);
+}
+
+/* Navigation List */
 nav ul {
   width: 100%;
   list-style: none;
@@ -35,271 +78,384 @@ nav ul {
   align-items: center;
 }
 
+/* Navigation Items */
 nav li {
-  height: 100px;
+  height: 80px;
 }
 
+/* Navigation Links */
 nav a {
   height: 100%;
-  padding: 0 30px;
+  padding: 0 20px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  color: white;
+  color: var(--text-color);
+  position: relative;
+  transition: color var(--transition-speed);
 }
 
-nav ul li a:hover {
-  background-color: black;
-  text-decoration: none;
-  color: white;
+/* Hover Effects with Underline Animation */
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 15px;
+  left: 50%;
+  background-color: var(--accent-color);
+  transition: all var(--transition-speed) ease;
 }
 
+nav a:hover::after {
+  left: 25%;
+  width: 50%;
+}
+
+/* First Navigation Item (Logo or Brand) */
 nav li:first-child {
   margin-right: auto;
   display: flex;
+  align-items: center;
 }
 
 nav li:first-child p {
-  color: white;
+  color: var(--text-color);
   padding-left: 10px;
-  padding-top: 25px;
-  font-size: 30px;
+  font-size: 28px;
+  font-weight: bold;
+  transition: font-size var(--transition-speed);
 }
 
 nav ul li img {
   border-radius: 50%;
-  height: 80px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  height: 60px;
+  transition: transform 0.3s;
 }
 
+nav ul li img:hover {
+  transform: scale(1.1);
+}
+
+/* ---------------------------------------------------
+   3. Sidebar Styling
+----------------------------------------------------- */
 .sidebar {
   position: fixed;
   top: 0;
-  right: 0;
+  right: -250px; /* Hidden by default */
   height: 100vh;
   width: 250px;
-  background-color: rgba(0, 0, 0, 0.689);
+  background-color: var(--nav-bg);
   backdrop-filter: blur(10px);
   list-style: none;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  z-index: 1000;
-  padding-left: 20px;
-  box-sizing: border-box;
+  z-index: 999;
+  padding: 20px;
+  transition: right var(--transition-speed);
 }
 
-.sidebar ul {
-  width: 100%;
-  list-style: none;
+/* Sidebar Active State */
+.sidebar.active {
+  right: 0;
 }
 
-.sidebar li {
+/* Sidebar Links */
+.sidebar a {
   width: 100%;
-  height: 100px;
-}
-
-.sidebar li a {
-  height: 100%;
-  width: 100%;
+  padding: 15px 20px;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  color: white;
+  color: var(--text-color);
+  display: block;
+  transition: background-color var(--transition-speed, color var(--transition-speed));
+  border-radius: 5px;
 }
 
-.sidebar li:hover {
-  background-color: black;
-  width: 100%;
+.sidebar a:hover {
+  background-color: var(--accent-color);
 }
 
+/* Menu Button */
 .menu-button {
   display: none;
+  cursor: pointer;
+  z-index: 1001;
 }
 
-nav svg path {
-  fill: #fff; /* white */
-}
-.sidebar svg path {
-  fill: #fff; /* white */
+.menu-button div {
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-color);
+  margin: 5px 0;
+  transition: all var(--transition-speed);
 }
 
+/* Menu Button Animation when Active */
+.menu-button.active div:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
 
-.carousel-fade{
-  background-color: rgba(0, 0, 0, 0.689);
+.menu-button.active div:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-button.active div:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* ---------------------------------------------------
+   4. Main Content Styling
+----------------------------------------------------- */
+main {
+  padding: 100px 20px 60px; /* Account for fixed nav and footer */
+  background-color: rgba(30, 60, 114, 0.85);
   backdrop-filter: blur(10px);
+  color: #f0f0f0;
+  animation: fadeIn 1s ease-in-out;
 }
 
-
-main{
- position: relative;
- background-color: rgba(0, 0, 0, 0.689);
- backdrop-filter: blur(10px);
- color: azure;
-
+/* Jumbotron Styling */
+main .jumbotron {
+  padding: 20px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(255, 126, 95, 0.8), rgba(30, 60, 114, 0.8));
+  border-radius: 10px;
+  animation: slideIn 1s ease-out;
 }
 
-
-main .jumbotron{
-  padding-top: 10px;
-  padding-right: 20px;
-  padding-left: 20px;
-  margin-left: 0px;
-  margin-right: 0px;
-  margin-bottom: 10px;
-  padding-top: 10px;
-  padding-left: 10px;
- 
-  
+/* Keyframes for slide-in */
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
-main p{
+
+main p {
   text-align: justify;
   padding: 10px;
+  line-height: 1.6;
 }
-main h2{
+
+main h2 {
   padding: 10px;
+  border-bottom: 2px solid var(--accent-color);
+  display: inline-block;
 }
 
+/* ---------------------------------------------------
+   5. Cards Styling
+----------------------------------------------------- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  animation: fadeIn 1s ease-in-out;
+}
 
-.cards{
+.card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
   overflow: hidden;
-}
-.card , .card-body{
-  background-color: black;
-  background-size: cover;
-}
-.card h5, p, a{
-  color: azure;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-.btn-primary{
-  height: 40px;
-  width: 80px;
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.4);
 }
 
-.card img{
-  height: 350px;
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform var(--transition-speed);
 }
 
+.card img:hover {
+  transform: scale(1.05);
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-body h5 {
+  margin-bottom: 10px;
+  color: var(--accent-color);
+}
+
+.card-body p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card-body a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color var(--transition-speed);
+}
+
+.card-body a:hover {
+  background-color: var(--secondary-color);
+}
+
+/* ---------------------------------------------------
+   6. Carousel Styling
+----------------------------------------------------- */
+.carousel-fade {
+  background-color: rgba(30, 60, 114, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* ---------------------------------------------------
+   7. Footer Styling
+----------------------------------------------------- */
 .footer {
-  background-color: rgba(0, 0, 0, 0.689);
+  background-color: var(--footer-bg);
   backdrop-filter: blur(10px);
   text-align: center;
-  padding: 10px 0;
-  position: inherit; 
+  padding: 20px 10px;
+  position: relative;
   bottom: 0;
   width: 100%;
-  color: white;
-  overflow: hidden;
+  color: var(--text-color);
+  transition: background-color var(--transition-speed);
 }
 
+/* Footer Links */
+.footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+  margin: 0 10px;
+  transition: color var(--transition-speed);
+}
 
+.footer a:hover {
+  color: var(--secondary-color);
+}
 
+/* ---------------------------------------------------
+   8. Media Queries for Responsiveness
+----------------------------------------------------- */
 
-
+/* Large Devices (1200px and up) */
 @media (max-width: 1200px) {
   nav li:first-child p {
       font-size: 26px;
   }
-  nav li:first-child img {
-      padding-top: 10px;
+  nav ul li img {
+      height: 60px;
   }
   .jumbotron {
       padding-bottom: 50px;
   }
 }
 
+/* Medium Devices (1000px and up) */
 @media (max-width: 1000px) {
   nav li:first-child p {
       font-size: 24px;
-  }
-  nav li:first-child img {
-      padding-top: 10px;
   }
   .jumbotron {
       padding-bottom: 40px;
       font-size: large;
   }
-
 }
 
+/* Small Devices (768px and up) */
 @media (max-width: 768px) {
   .hideOnMobile {
       display: none;
   }
   .menu-button {
       display: block;
-      cursor: pointer;
-      margin: 0;
-      padding: 10px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
   }
   nav li:first-child {
       justify-content: center;
+      flex-direction: column;
+      align-items: center;
   }
   nav li:first-child p {
-      padding-bottom: 20px;
-      font-size: 24px;
+      padding-bottom: 10px;
+      font-size: 22px;
       text-align: center;
   }
   nav li:first-child img {
     padding-top: 10px;
-    padding-bottom: 15px;
-  
+    padding-bottom: 10px;
+    height: 50px;
   }
   .jumbotron {
       padding-bottom: 30px;
       text-align: center;
       justify-content: center;
   }
-  
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
+/* Extra Small Devices (480px and up) */
 @media (max-width: 480px) {
-  .hideOnMobile {
-      display: none;
-  }
-  .menu-button {
-      display: block;
-      cursor: pointer;
-      margin: 0;
-      padding: 10px;
-  }
-  nav li:first-child {
-      align-items: center;
-  }
   nav li:first-child p {
       padding-left: 0;
       padding-top: 5px;
-      font-size: 13px;
+      font-size: 16px;
       text-align: center;
-      margin-top: 30px;
+      margin-top: 20px;
   }
   .jumbotron {
-      padding-bottom: unset;
+      padding-bottom: 20px;
       text-align: center;
       justify-content: center;
   }
-  .cards img{
-    height: 250px;
+  .cards img {
+    height: 180px;
   }
-  .footer p{
-  font-size: smaller;
-
+  .footer p {
+    font-size: smaller;
   }
 }
 
+/* ---------------------------------------------------
+   9. Additional Animations and Effects
+----------------------------------------------------- */
 
+/* Button Hover Animation */
+.btn-primary {
+  height: 40px;
+  width: 100px;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 5px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform 0.2s;
+}
 
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
 
-
-
-
-
-
-
-
-
-
-
+/* Smooth Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
